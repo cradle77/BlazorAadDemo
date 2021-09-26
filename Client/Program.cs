@@ -1,7 +1,9 @@
+using Client.GraphApi;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Graph;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,7 +30,7 @@ namespace Client
 
                     return handler;
                 });
-
+            
             builder.Services.AddSingleton(sp =>
             {
                 var factory = sp.GetService<IHttpClientFactory>();
@@ -40,6 +42,8 @@ namespace Client
             {
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
             });
+
+            builder.Services.AddGraphClient("https://graph.microsoft.com/User.Read", "https://graph.microsoft.com/Mail.Read");
 
             await builder.Build().RunAsync();
         }

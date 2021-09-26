@@ -1,11 +1,44 @@
-﻿@inject HttpClient Http
+﻿@page "/myprofile"
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject GraphServiceClient GraphClient
+@using System.IO 
 
-<h3>MyProfile</h3>
+
+@if (_user == null)
+{
+    <p><em>Profile is being loaded..</em></p>
+}
+else
+{
+    <h4>@_user.DisplayName</h4>
+    <img style="height:@(_photo.Height); width:@(_photo.Width)" src="@_photoContent" />
+}
 
 @code {
+    private User _user;
+    private ProfilePhoto _photo;
+    private string _photoContent;
+
     protected override async Task OnInitializedAsync()
     {
-        // for later
+        _user = await this.GraphClient.Me
+            .Request()
+            .Select(x => x.DisplayName)
+            .GetAsync();
+
+        _photo = await this.GraphClient.Me.Photo
+            .Request()
+            .GetAsync();
+
+        var contentStream = await this.GraphClient.Me.Photo.Content
+            .Request()
+            .GetAsync();
+
+        using (var reader = new MemoryStream())
+        {
+            await contentStream.CopyToAsync(reader);
+            var type = _photo.AdditionalData["@odata.mediaContentType"];
+            _photoContent = $"data:{type};base64,{Convert.ToBase64String(reader.ToArray())}";
+        }
     }
 }
