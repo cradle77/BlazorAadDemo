@@ -1,4 +1,5 @@
 using Client.GraphApi;
+using Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -43,7 +44,12 @@ namespace Client
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
             });
 
-            builder.Services.AddGraphClient("https://graph.microsoft.com/User.Read", "https://graph.microsoft.com/Mail.Read");
+            builder.Services.AddGraphClient("https://graph.microsoft.com/User.Read", 
+                "https://graph.microsoft.com/Schedule.Read.All",
+                "https://graph.microsoft.com/Schedule.ReadWrite.All", 
+                "https://graph.microsoft.com/Calendars.ReadWrite");
+
+            builder.Services.AddScoped<IShiftService, ShiftService>();
 
             await builder.Build().RunAsync();
         }
