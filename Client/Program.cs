@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebAssembly;
 
 namespace Client
 {
@@ -39,7 +40,9 @@ namespace Client
             builder.Services.AddMsalAuthentication(options =>
             {
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
+                //options.UserOptions.RoleClaim = "roles";
             });
+            
 
             await builder.Build().RunAsync();
         }
