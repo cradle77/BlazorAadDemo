@@ -27,7 +27,7 @@ namespace Client
                 {
                     var handler = sp.GetRequiredService<AuthorizationMessageHandler>()
                         .ConfigureHandler(new[] { "https://localhost:5002" },
-                        scopes: new[] { "api://blazor-demo/weatherapi" });
+                        scopes: new[] { "api://blazor-demo-graph/weatherapi" });
 
                     return handler;
                 });
