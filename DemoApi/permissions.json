@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "CanLetPassengersBoard": [
+      {
+        "role": [ "Captain", "FirstOfficer", "CabinCrewMember" ]
+      }
+    ],
+    "CanFlyAnAirplane": [
+      {
+        "role": [ "Captain", "FirstOfficer" ],
+        "bloodAlcoholLevel": "0"
+      }
+    ],
+    "CanSeeForecast": [
+      {
+        "role": [ "Admins" ]
+      }
+    ],
+    "CanUseCounter": [
+      {
+        "role": [ "Users", "Admins" ]
+      }
+    ]
+  }
+}

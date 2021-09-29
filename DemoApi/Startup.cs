@@ -1,3 +1,4 @@
+using Des.AspNetCore.Permissions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,8 @@ namespace DemoApi
             services.AddControllers();
 
             services.AddCors();
+
+            services.AddPermissionPolicies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +60,8 @@ namespace DemoApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMyPermissions();
 
             app.UseEndpoints(endpoints =>
             {
