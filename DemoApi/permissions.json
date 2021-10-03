@@ -13,12 +13,12 @@
     ],
     "CanSeeForecast": [
       {
-        "role": [ "Admins" ]
+        "role": [ "Admin" ]
       }
     ],
     "CanUseCounter": [
       {
-        "role": [ "Users", "Admins" ]
+        "role": [ "User", "Admin" ]
       }
     ]
   }
