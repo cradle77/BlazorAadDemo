@@ -30,7 +30,15 @@ namespace DemoApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+                .AddMicrosoftIdentityWebApi(options =>
+                {
+                    Configuration.Bind("AzureAd", options);
+                    options.TokenValidationParameters.NameClaimType = "name";
+                },
+                options =>
+                {
+                    Configuration.Bind("AzureAd", options);
+                });
 
             services.AddControllers();
 
