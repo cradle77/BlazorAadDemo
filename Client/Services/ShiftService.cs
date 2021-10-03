@@ -29,15 +29,17 @@ namespace Client.Services
                 .Request()
                 .GetAsync();
 
-            var assignedShifts = await _graphServiceClient
+            var assignedShifts = (await _graphServiceClient
                 .Teams[teamId]
                 .Schedule
                 .Shifts
                 .Request()
-                .GetAsync();
+                .GetAsync())
+                .Where(x => x.UserId == userId);
 
             return openShifts
-                .Select(x => new ShiftViewModel(x, assignedShifts, userId))
+                .Select(x => new ShiftViewModel(x, assignedShifts))
+                .OrderBy(x => x.From)
                 .ToList();
         }
 
@@ -48,7 +50,15 @@ namespace Client.Services
 
             Shift assignment = shift.BuildShift(userId);
 
-            await _graphServiceClient.Teams[teamId].Schedule.Shifts.Request().AddAsync(assignment);
+            await _graphServiceClient.Teams[teamId].Schedule.Shifts
+                .Request()
+                .AddAsync(assignment);
+
+            shift.OpenShift.SharedOpenShift.OpenSlotCount -= 1;
+            await _graphServiceClient.Teams[teamId].Schedule
+                .OpenShifts[shift.Id]
+                .Request()
+                .PutAsync(shift.OpenShift);
 
             var calEvent = shift.BuildEvent();
 
@@ -58,6 +68,12 @@ namespace Client.Services
         public async Task CancelBookingAsync(string teamId, ShiftViewModel shift)
         {
             await _graphServiceClient.Teams[teamId].Schedule.Shifts[shift.AssignmentId].Request().DeleteAsync();
+
+            shift.OpenShift.SharedOpenShift.OpenSlotCount += 1;
+            await _graphServiceClient.Teams[teamId].Schedule
+                .OpenShifts[shift.Id]
+                .Request()
+                .PutAsync(shift.OpenShift);
 
             var source = shift.BuildEvent();
             var calEvent = (await _graphServiceClient.Me

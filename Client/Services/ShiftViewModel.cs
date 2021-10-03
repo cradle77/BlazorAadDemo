@@ -27,7 +27,7 @@ namespace Client.Services
             }
         }
 
-        public ShiftViewModel(OpenShift source, IEnumerable<Shift> assignedShifts, string currentUserId)
+        public ShiftViewModel(OpenShift source, IEnumerable<Shift> assignedShifts)
         {
             this.From = source.SharedOpenShift.StartDateTime.Value.DateTime;
             this.To = source.SharedOpenShift.EndDateTime.Value.DateTime;
@@ -40,13 +40,16 @@ namespace Client.Services
 
             this.Id = source.Id;
             this.AssignmentId = assignedShift?.Id;
-            this.IsAssigned = assignedShift != null;
-            this.IsMine = assignedShift?.UserId == currentUserId;
+            this.IsAssigned = source.SharedOpenShift.OpenSlotCount == 0;
+            this.IsMine = assignedShift != null;
+
+            this.OpenShift = source;
         }
 
         public bool IsAssigned { get; set; }
 
         public bool IsMine { get; set; }
+        public OpenShift OpenShift { get; private set; }
 
         internal Shift BuildShift(string currentUserId)
         {
