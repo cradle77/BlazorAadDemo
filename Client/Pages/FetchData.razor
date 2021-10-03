@@ -19,17 +19,19 @@ else
                 <th>Temp. (C)</th>
                 <th>Temp. (F)</th>
                 <th>Summary</th>
+                <th>User</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var forecast in forecasts)
             {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
+            <tr>
+                <td>@forecast.Date.ToShortDateString()</td>
+                <td>@forecast.TemperatureC</td>
+                <td>@forecast.TemperatureF</td>
+                <td>@forecast.Summary</td>
+                <td>@forecast.User</td>
+            </tr>
             }
         </tbody>
     </table>
@@ -52,5 +54,7 @@ else
         public string Summary { get; set; }
 
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+        public string User { get; set; }
     }
 }
