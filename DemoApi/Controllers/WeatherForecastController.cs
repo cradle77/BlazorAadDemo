@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DemoApi.Controllers
 {
-    [Authorize(Roles = "Admins")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
