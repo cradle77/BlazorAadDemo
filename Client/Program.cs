@@ -40,7 +40,7 @@ namespace Client
             builder.Services.AddMsalAuthentication(options =>
             {
                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-                //options.UserOptions.RoleClaim = "roles";
+                options.UserOptions.RoleClaim = "roles";
             });
             
 
